@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible"
+        content="IE=edge">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+  <title>Generate Password Pattern | By Rio Chandra</title>
+</head>
+
+<body>
+  <main id="container">
+    <section>
+      <h1 style="text-align: center;">
+        Password Pattern Generator
+      </h1>
+      <article>
+        <h4>
+          Are you bored with the old password? Try this app to generate a new password pattern.
+        </h4>
+      </article>
+    </section>
+    <section>
+      <input type="hidden"
+             class="patternId"
+             placeholder="No Pattern"
+             readonly />
+    </section>
+
+    <section style="position: relative;">
+      <button id="btn-reset"
+              style="display: none;">
+        <svg alt="MdDeleteOutline"
+             stroke="currentColor"
+             fill="currentColor"
+             stroke-width="0"
+             viewBox="0 0 24 24"
+             height="1em"
+             width="1em"
+             xmlns="http://www.w3.org/2000/svg">
+          <path fill="none"
+                d="M0 0h24v24H0V0z"></path>
+          <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5l-1-1h-5l-1 1H5v2h14V4z"></path>
+        </svg>
+        <span>
+          Reset
+        </span>
+      </button>
+      <canvas width="400"
+              height="400"></canvas>
+    </section>
+
+    <section style="display: flex; margin:auto;">
+      <button id="btn-generate"
+              style="margin-right: 12px;">
+        <svg alt="GrRotateRight"
+             stroke="currentColor"
+             fill="currentColor"
+             stroke-width="0"
+             viewBox="0 0 24 24"
+             height="1em"
+             width="1em"
+             xmlns="http://www.w3.org/2000/svg">
+          <path
+                d="M12.48,3.43A9.09,9.09,0,0,1,18.3,5.55V2.35h1.64v6.5h-6.5V7.21H17.7a7.46,7.46,0,1,0,1.47,8.65l1.46.73A9.11,9.11,0,1,1,12.48,3.43Z">
+          </path>
+        </svg>
+        <span>
+          Generate
+        </span>
+      </button>
+      <button id="btn-play">
+        <svg alt="BsPlayCircle"
+             stroke="currentColor"
+             fill="currentColor"
+             stroke-width="0"
+             viewBox="0 0 16 16"
+             height="1em"
+             width="1em"
+             xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+          <path
+                d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z">
+          </path>
+        </svg>
+        <span>
+          Play
+        </span>
+      </button>
+    </section>
+    <article>
+      <p>
+        This is app to generate password pattern. If you bored with the old password, you can try this app to generate
+        using this app
+      </p>
+      <p>
+        Create your own pattern by clicking on the dots. You can also generate a random pattern by clicking the generate
+        button. You can also play the pattern by clicking the play button. You can also reset the pattern by clicking
+        the
+        reset button.
+      </p>
+      <p>
+        This app are not store any data. All data are stored in your browser.
+      </p>
+      <h3>
+        Created by <a href="https://riochndr.com">Rio Chandra</a>
+      </h3>
+    </article>
+  </main>
+</body>
+<style>
+  /** Define color variable css **/
+  :root {
+    --color-dot: #1f1f1e;
+    --color-line: #d4baab;
+    --color-active-dot: #c75e3b;
+    --color-pointer-dot: #d4baab;
+  }
+
+  body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+
+  #container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+    max-width: 428px;
+    margin: auto;
+  }
+
+  #container>*+* {
+    margin-top: 24px;
+    margin: auto;
+  }
+
+  .patternId {
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 24px;
+    border: 0px;
+  }
+
+  button {
+    border: 1px solid var(--color-line);
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 1rem;
+    background-color: var(--color-active-dot);
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  button>*+* {
+    margin-left: 0.5rem;
+  }
+
+  #btn-reset {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  article {
+    margin: auto;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: var(--color-active-dot);
+  }
+
+  a {
+    color: var(--color-dot);
+    font-weight: normal;
+  }
+
+  canvas {
+    width: 100%;
+    touch-action: none;
+    border: 1px solid var(--color-dot);
+    border-radius: 8px;
+  }
+</style>
+<script>
+  const canvas = document.querySelector('canvas');
+  const ctx = canvas.getContext('2d');
+
+  const width = canvas.width;
+  const height = canvas.height;
+
+  const colors = {
+    dot: '#1f1f1e',
+    line: '#d4baab',
+    activeDot: '#c75e3b',
+    pointerDot: '#d4baab'
+  }
+
+  const pointerPos = {
+    x: 0,
+    y: 0,
+  }
+
+  let selectedPattern = []
+  let isDrawing = false
+  let isAnimating = false
+  let animationInfo = {
+    start: 0,
+    end: 0,
+    duration: 0,
+    frame: 0,
+  }
+  let currentFrame = 0
+  const listCircle = {}
+  const offsetCanvas = {
+    x: canvas.getBoundingClientRect().left,
+    y: canvas.getBoundingClientRect().top,
+  }
+
+  canvas.addEventListener('pointermove', (e) => {
+    pointerPos.x = e.clientX;
+    pointerPos.y = e.clientY;
+  })
+
+  class Circle {
+    constructor(x, y, r, color, isActive) {
+      this.x = x;
+      this.y = y;
+      this.r = r;
+      this.color = color;
+      this.isActive = isActive;
+    }
+
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+      if (!this.color) {
+        if (this.isActive) {
+          ctx.fillStyle = colors.activeDot;
+        } else {
+          ctx.fillStyle = colors.dot;
+        }
+      } else {
+        ctx.fillStyle = this.color;
+      }
+      ctx.stroke();
+      ctx.fill();
+    }
+  }
+
+  const executorList = [
+    generateDot,
+    drawPatternStick,
+    getSelectedPattern,
+    doAnimationPattern
+  ]
+
+  function run(frame) {
+    currentFrame = frame
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    executorList.forEach(executor => {
+      executor(frame);
+    })
+    requestAnimationFrame(run);
+  }
+  run()
+
+  function generateDot() {
+    let id = 1
+    for (let y = 0; y < 3; y++) {
+      for (let x = 0; x < 3; x++) {
+        if (!listCircle[id]) {
+          listCircle[id] = new Circle(width / 4 * (x + 1), height / 4 * (y + 1), 5)
+        }
+        let circle = listCircle[id]
+        circle.draw()
+        id++;
+      }
+    }
+  }
+
+  function drawPatternStick() {
+    if (isAnimating) return;
+    if (selectedPattern.length === 0) return;
+    drawPattern(selectedPattern)
+  }
+
+  function drawPattern(pattern, callbackLine) {
+    ctx.beginPath();
+    pattern.forEach((dot, i) => {
+      const x = (dot - 1) % 3;
+      const y = Math.floor((dot - 1) / 3);
+      const lineX = width / 4 * (x + 1)
+      const lineY = height / 4 * (y + 1)
+      if (i === 0) {
+        ctx.moveTo(lineX, lineY);
+      } else {
+        ctx.lineTo(lineX, lineY);
+      }
+      listCircle[dot].isActive = true
+    })
+    let lastPosition = {}
+    if (isDrawing && !callbackLine) {
+      lastPosition.x = pointerPos.x - offsetCanvas.x
+      lastPosition.y = pointerPos.y - offsetCanvas.y
+      ctx.lineTo(lastPosition.x, lastPosition.y);
+    }
+    if (callbackLine) {
+      lastPosition = callbackLine()
+    }
+    ctx.strokeStyle = colors.line;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.lineWidth = 1;
+    if (lastPosition?.x && lastPosition?.y) {
+      let cirlce = new Circle(lastPosition.x, lastPosition.y, 9, colors.pointerDot)
+      cirlce.draw()
+    }
+  }
+
+  function getSelectedPattern() {
+    if (!isDrawing) return;
+    Object.keys(listCircle).find(id => {
+      const circle = listCircle[id]
+      offsetCanvas.x = canvas.getBoundingClientRect().left
+      offsetCanvas.y = canvas.getBoundingClientRect().top
+      const distance = Math.sqrt(Math.pow(pointerPos.x - (circle.x + offsetCanvas.x), 2) + Math.pow(pointerPos.y - (circle.y + offsetCanvas.y), 2))
+      if (distance < circle.r + 25) {
+        if (!selectedPattern.includes(id)) {
+          selectedPattern.push(id);
+        }
+      }
+    })
+  }
+
+  function savePattern(data) {
+    const patternForm = document.querySelector('.patternId')
+    patternForm.value = data ?? selectedPattern.join(',')
+    const resetButton = document.querySelector('#btn-reset')
+    if (resetButton) {
+      if (selectedPattern.length > 0) {
+        resetButton.style.display = 'block'
+      } else {
+        resetButton.style.display = 'none'
+      }
+    }
+  }
+
+  function resetPattern() {
+    selectedPattern = []
+    savePattern(null)
+    Object.keys(listCircle).find(id => {
+      const circle = listCircle[id]
+      circle.isActive = false
+    })
+  }
+
+  function canvasOnCursorDown(e) {
+    if (selectedPattern.length > 0) return;
+    e.preventDefault()
+    resetPattern()
+    isDrawing = true
+  }
+
+  function canvasOnCursorUp(e) {
+    if (isDrawing) {
+      savePattern()
+      playAnimationPattern()
+    }
+    isDrawing = false
+  }
+
+  canvas.addEventListener('pointerdown', canvasOnCursorDown)
+  canvas.addEventListener('pointerup', canvasOnCursorUp)
+
+  function pickRandomData(dataArr) {
+    return dataArr[Math.floor(Math.random() * dataArr.length)]
+  }
+
+  const btnGenerate = document.querySelector('#btn-generate')
+  btnGenerate.addEventListener('click', (e) => {
+    resetPattern()
+
+    const length = pickRandomData([4, 5, 6, 7, 8, 9])
+    let candidateData = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    for (let i = 0; i < length; i++) {
+      const randomPos = pickRandomData(candidateData)
+      candidateData = candidateData.filter(data => data !== randomPos)
+      selectedPattern.push(randomPos)
+    }
+
+    Object.keys(listCircle).find(id => {
+      if (!selectedPattern.includes(id)) return;
+      const circle = listCircle[id]
+      circle.isActive = false
+    })
+    playAnimationPattern()
+    savePattern()
+  })
+
+  const btnPlay = document.querySelector('#btn-play')
+  btnPlay.addEventListener('click', (e) => {
+    playAnimationPattern()
+  })
+
+  function playAnimationPattern() {
+    Object.keys(listCircle).find(id => {
+      const circle = listCircle[id]
+      circle.isActive = false
+    })
+    isAnimating = true
+    if (isAnimating) {
+      animationInfo.start = currentFrame
+      animationInfo.duration = selectedPattern.length * 100
+      animationInfo.end = animationInfo.start + animationInfo.duration
+      animationInfo.frame = 0
+    }
+  }
+  function resetAnimating() {
+    isAnimating = false
+    animationInfo = {
+      start: 0,
+      end: 0,
+      duration: 0,
+      frame: 0
+    }
+  }
+
+  function doAnimationPattern(i) {
+    if (!isAnimating) return;
+
+    animationInfo.frame = currentFrame - animationInfo.start;
+    if (animationInfo.frame > animationInfo.duration) {
+      resetAnimating()
+      return;
+    }
+
+    const percent = animationInfo.frame / animationInfo.duration
+
+    const currentPosPattern = selectedPattern.length * percent
+    const currentPattern = selectedPattern.slice(0, Math.floor(currentPosPattern))
+    drawPattern(currentPattern, () => {
+      const fromDot = currentPattern[currentPattern.length - 1]
+      const targetDot = selectedPattern[Math.floor(currentPosPattern)]
+      const fromCircle = listCircle[fromDot]
+      const targetCircle = listCircle[targetDot]
+      if (!fromCircle || !targetCircle) return;
+
+      const fromX = fromCircle.x
+      const fromY = fromCircle.y
+      const targetX = targetCircle.x
+      const targetY = targetCircle.y
+
+      const currentX = fromX + (targetX - fromX) * (currentPosPattern - Math.floor(currentPosPattern))
+      const currentY = fromY + (targetY - fromY) * (currentPosPattern - Math.floor(currentPosPattern))
+
+      ctx.lineTo(currentX, currentY)
+      return {
+        x: currentX,
+        y: currentY
+      }
+    })
+  }
+
+  const resetBtn = document.querySelector('#btn-reset')
+  resetBtn.addEventListener('click', (e) => {
+    resetPattern()
+  })
+
+</script>
+
+</html>
